@@ -7,10 +7,10 @@
 <div class="container">
 <div class="row">
     <div class="col">
-    <Table_input />
+    <Table_input isWriteable={true}/>
     </div>
     <div class="col">
-    <Table_input />
+    <Table_input isWriteable={false} />
     </div>
 </div>
 
