@@ -1,8 +1,9 @@
 
 <script>
+    import { state } from '../store.js'
 	let columns = new Array(5)
 	let rows = new Array(15)
-	let state = new Array(rows.length*columns.length).fill(false)
+	// let state = new Array(rows.length*columns.length).fill(false)
 	let isDrag = false
 
     let times = [];
@@ -24,7 +25,7 @@
 	}
 	
 	const toggle = (r, c) => {
-		state[r*columns.length+c] = !state[r*columns.length+c]
+		$state[r*columns.length+c] = !$state[r*columns.length+c]
 	}
 	
 	const mouseHandler = (r, c) => (e) => {
@@ -61,7 +62,7 @@
     }
 </style>
 
-<svelte:window on:mousedown={beginDrag} on:mouseup={endDrag} />
+<!-- <svelte:window on:mousedown={beginDrag} on:mouseup={endDrag} /> -->
 <table>
     <tr>
         <th>Time</th>
@@ -76,7 +77,7 @@
 		<tr>
             <th class="noselect">{times[r]}:00 {r > 2 ? "pm" : "am"}</th>
 			{#each columns as _column, c}
-				<td on:mousedown={mouseHandler(r, c)} on:mouseenter={mouseHandler(r, c)} class:selected="{state[r*columns.length+c]}"></td>
+				<td class:selected="{$state[r*columns.length+c]}"></td>
 			{/each}
 		</tr>
 	{/each}
