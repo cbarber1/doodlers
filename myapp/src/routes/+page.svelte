@@ -12,7 +12,6 @@
     </div>
     <div class="col">
     <Table_input isWriteable={false} />
-    <Overlap_table />
     </div>
 </div>
 
