@@ -1,5 +1,5 @@
 <script>
-	import Table_input from './Table_input.svelte';
+  import Table_input from './Table_input.svelte';
   import Overlap_table from './overlap_table.svelte'; // no input allowed here 
   import Toggle from "../lib/toggle.svelte";
 </script>
