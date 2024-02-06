@@ -1,6 +1,10 @@
 
 <script>
     import { state } from '../store.js';
+    import Toggle from './toggle.svelte';
+    import Switch from './switch.svelte';
+    let slidervalue;
+
     export let isWriteable;
 	let columns = new Array(8)
 	let rows = new Array(30)
@@ -103,8 +107,10 @@
         width: 0%;
         transition: width 0.3s;
     }
-    .top-padding {
+    .toggle {
+        display: block;
         height: 60px;
+        float: left;
     }
 </style>
 
@@ -117,8 +123,9 @@
     <div class="progress-bar-fill" style="width: {progressBarWidth}%"></div>
 </div>
 {:else}
-<div class="top-padding">
-    <div></div>
+<div class="toggle">
+    <!-- <Toggle /> -->
+    <Switch bind:value={slidervalue} label="Choose a view" design="multi" options={['Availability', 'Preferences']} fontSize={12}/>
 </div>
 {/if}
 
