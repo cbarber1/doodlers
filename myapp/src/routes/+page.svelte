@@ -1,15 +1,17 @@
 <script>
 	import Table_input from './Table_input.svelte';
-    import Toggle from "../lib/toggle.svelte";
+    import clock from '../lib/assets/clock.png';
+    import clock2 from '../lib/assets/in-time.png'
 </script>
 
-<h1 class="text-center p-4">Doodlers Epic Page</h1>
+
+<h1 class="text-center p-4">
+    <!-- Attribution: <a href="https://www.flaticon.com/free-icons/time-and-date" title="time and date icons">Time and date icons created by Iconic Panda - Flaticon</a> -->
+    <a href="javascript:location.reload(true);"><img src={clock} alt="Clock Icon" style="width: 32px; height: 32px; margin-right: 5px; margin-bottom: 6px; padding: 0;"></a>
+    Prefer2Meet</h1>
 
 <div class="container">
   <div class="row">
-    <div class="col d-flex justify-content-end m-4">
-      <Toggle />
-    </div>
   </div>
   <div class="row">
     <div class="col">
