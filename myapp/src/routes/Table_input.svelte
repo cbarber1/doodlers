@@ -1,13 +1,19 @@
 
 <script>
-    import { state } from '../store.js';
+    import { selections } from '../store.js';
     export let isWriteable;
 	let columns = new Array(8)
 	let rows = new Array(30)
 	let isDrag = false
     let selectedBlocksCount = 0;
     let selectedHours = 0;
-
+    let selectedBlocksRight = new Array(columns.length * rows.length).fill(false);
+    
+    if (!isWriteable) {
+        [2 * columns.length + 10, 2 * columns.length + 11, 3 * columns.length + 12, 2 * columns.length + 12, 6 * rows.length + 10, 7 * rows.length + 11, 8 * rows.length + 12, 9 * rows.length + 13].forEach(index => {
+            selectedBlocksRight[index] = true;
+        });
+    }
 
     let times = [];
     let time_start = 9;
@@ -19,9 +25,14 @@
         times.push([])
         time_start++;
     }
-	
+
     const minHours = 4;
     let progressBarWidth = 0;
+
+    // initialize the pre-selections on right
+    // selectedBlocksRight.forEach(index => {
+    //     $selections[index] = true;
+    // });
 
 	const beginDrag = () => {
 		isDrag = true
@@ -33,7 +44,7 @@
 	
 	const toggle = (r, c) => {
         if (isWriteable) {
-            $state[r*columns.length+c] = !$state[r*columns.length+c]
+            $selections[r*columns.length+c] = !$selections[r*columns.length+c]
             updateSelectedBlocksCount();
         }
 	}
@@ -45,8 +56,14 @@
 	}
     
     const updateSelectedBlocksCount = () => {
-        selectedBlocksCount = $state.filter((block) => block).length;
+        selectedBlocksCount = $selections.filter((block) => block).length;
     };
+
+    const isOverlappingBlock = (r, c) => {
+        const index = r * columns.length + c;
+        return selectedBlocksRight[index] && $selections[index];
+    };
+
     $: progressBarWidth = (selectedHours / minHours) * 100;
     $: selectedHours = selectedBlocksCount * .5
 </script>
@@ -76,6 +93,10 @@
 	.selected {
 		background-color: green;
 	}
+
+    td.overlapping {
+        background-color: darkgreen;
+    }
 
     .small-text {
         font-size: 10px;
@@ -140,9 +161,13 @@
 		<tr>
 			{#each columns as _column, c}
                 {#if c != 0}
-				<td on:mousedown={mouseHandler(r, c)} on:mouseenter={mouseHandler(r, c)} class:selected="{$state[r*columns.length+c]}"></td>
+                    <td on:mousedown={mouseHandler(r, c)}
+                    on:mouseenter={mouseHandler(r, c)}
+                    class:selected="{$selections[r*columns.length+c] | selectedBlocksRight[r * columns.length + c]}"
+                    class:overlapping="{isOverlappingBlock(r, c)}"
+                    ></td>
                 {:else}
-                <div class="noselect"><p class="small-text">{times[r]}</p></div>
+                    <div class="noselect"><p class="small-text">{times[r]}</p></div>
                 {/if}
             {/each}
 		</tr>
