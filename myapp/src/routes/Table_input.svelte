@@ -17,7 +17,9 @@
     
     if (!isWriteable) {
         // hardcoded time presets for the right calendar
-        [2 * columns.length + 10, 2 * columns.length + 11, 3 * columns.length + 12, 2 * columns.length + 12, 6 * rows.length + 10, 7 * rows.length + 11, 8 * rows.length + 12, 9 * rows.length + 13].forEach(index => {
+        [2 * columns.length + 10, 2 * columns.length + 11, 3 * columns.length + 12, 
+        2 * columns.length + 12, 6 * rows.length + 10, 7 * rows.length + 11, 
+        8 * rows.length + 12, 9 * rows.length + 13].forEach(index => {
             selectedBlocksRight[index] = true;
         });
     }
@@ -78,7 +80,7 @@
     }
 	td {
 		width: 80px;
-		height: 15px;
+		/* height: 15px; */
 		background-color: white;
         border: 1px dashed black;
         padding: none;
@@ -86,7 +88,7 @@
 	}
 
     tr {
-       /* how to make rows same height? */
+        height: 20px;
     }
 
     th {
@@ -103,6 +105,9 @@
 
     .small-text {
         font-size: 10px;
+        margin: none;
+        padding: none;
+        font-weight: normal;
     }
 
     .noselect {
@@ -172,9 +177,9 @@
                     on:mouseenter={mouseHandler(r, c)}
                     class:selected="{$state[r*columns.length+c] | selectedBlocksRight[r * columns.length + c]}"
                     class:overlapping="{isOverlappingBlock(r, c)}"
-                    ></td>
+                    >  </td>
                 {:else}
-                    <div class="noselect"><p class="small-text">{times[r]}</p></div>
+                    <div class="noselect"><th class="small-text">{times[r]}</th></div>
                 {/if}
             {/each}
 		</tr>
