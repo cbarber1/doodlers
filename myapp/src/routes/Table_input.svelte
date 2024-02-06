@@ -46,7 +46,7 @@
 	
 	const toggle = (r, c) => {
         if (isWriteable) {
-            $state[r*columns.length+c] = !$state[r*columns.length+c]
+            $selections[r*columns.length+c] = !$selections[r*columns.length+c]
             updateSelectedBlocksCount();
         }
 	}
@@ -58,7 +58,7 @@
 	}
     
     const updateSelectedBlocksCount = () => {
-        selectedBlocksCount = $state.filter((block) => block).length;
+        selectedBlocksCount = $selections.filter((block) => block).length;
     };
 
     const isOverlappingBlock = (r, c) => {
