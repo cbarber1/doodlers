@@ -6,6 +6,7 @@
 
 
 <h1 class="text-center p-4">
+    <!-- Attribution: <a href="https://www.flaticon.com/free-icons/time-and-date" title="time and date icons">Time and date icons created by Iconic Panda - Flaticon</a> -->
     <a href="javascript:location.reload(true);"><img src={clock} alt="Clock Icon" style="width: 32px; height: 32px; margin-right: 5px; margin-bottom: 6px; padding: 0;"></a>
     Prefer2Meet</h1>
 
