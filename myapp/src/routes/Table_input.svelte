@@ -46,6 +46,7 @@
 	
 	const toggle = (r, c) => {
         if (isWriteable) {
+            $state[r*columns.length+c] = !$state[r*columns.length+c]
             updateSelectedBlocksCount();
         }
 	}
