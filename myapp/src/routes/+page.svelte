@@ -1,5 +1,5 @@
 <script>
-    import Toggle from "../lib/toggle.svelte";
+    import Toggle from "./toggle.svelte";
 	import Table_input from './Table_input.svelte';
     import clock from '../lib/assets/clock.png';
 </script>
