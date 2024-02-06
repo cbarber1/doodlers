@@ -1,7 +1,13 @@
 
 <script>
-    import { selections } from '../store.js';
+    import { state } from '../store.js';
+    import Toggle from './toggle.svelte';
+    import Switch from './switch.svelte';
+    let slidervalue;
+
+
     export let isWriteable, title;
+
 	let columns = new Array(8)
 	let rows = new Array(30)
 	let isDrag = false
@@ -40,7 +46,7 @@
 	
 	const toggle = (r, c) => {
         if (isWriteable) {
-            $selections[r*columns.length+c] = !$selections[r*columns.length+c]
+            $state[r*columns.length+c] = !$state[r*columns.length+c]
             updateSelectedBlocksCount();
         }
 	}
@@ -52,12 +58,12 @@
 	}
     
     const updateSelectedBlocksCount = () => {
-        selectedBlocksCount = $selections.filter((block) => block).length;
+        selectedBlocksCount = $state.filter((block) => block).length;
     };
 
     const isOverlappingBlock = (r, c) => {
         const index = r * columns.length + c;
-        return selectedBlocksRight[index] && $selections[index];
+        return selectedBlocksRight[index] && $state[index];
     };
 
     $: progressBarWidth = (selectedHours / minHours) * 100;
@@ -121,8 +127,10 @@
         width: 0%;
         transition: width 0.3s;
     }
-    .top-padding {
+    .toggle {
+        display: block;
         height: 60px;
+        float: left;
     }
 </style>
 
@@ -135,8 +143,9 @@
     <div class="progress-bar-fill" style="width: {progressBarWidth}%"></div>
 </div>
 {:else}
-<div class="top-padding">
-    <div></div>
+<div class="toggle">
+    <!-- <Toggle /> -->
+    <Switch bind:value={slidervalue} label="Choose a view" design="multi" options={['Availability', 'Preferences']} fontSize={12}/>
 </div>
 {/if}
 
@@ -161,7 +170,7 @@
                 {#if c != 0}
                     <td on:mousedown={mouseHandler(r, c)}
                     on:mouseenter={mouseHandler(r, c)}
-                    class:selected="{$selections[r*columns.length+c] | selectedBlocksRight[r * columns.length + c]}"
+                    class:selected="{$state[r*columns.length+c] | selectedBlocksRight[r * columns.length + c]}"
                     class:overlapping="{isOverlappingBlock(r, c)}"
                     ></td>
                 {:else}

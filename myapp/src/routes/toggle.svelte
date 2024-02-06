@@ -16,6 +16,7 @@
 
 <style>
   .segmented-button-wrapper {
-    margin-right: 120px;
+    margin-right: 50px;
   }
+
 </style>
