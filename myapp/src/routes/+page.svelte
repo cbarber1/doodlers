@@ -7,10 +7,10 @@
 <div class="container">
 <div class="row">
     <div class="col">
-    <Table_input isWriteable={true}/>
+    <Table_input title={"My Availability"} isWriteable={true}/>
     </div>
     <div class="col">
-    <Table_input isWriteable={false} />
+    <Table_input title={"Group's Availability"} isWriteable={false} />
     </div>
 </div>
 

@@ -1,7 +1,7 @@
 
 <script>
     import { selections } from '../store.js';
-    export let isWriteable;
+    export let isWriteable, title;
 	let columns = new Array(8)
 	let rows = new Array(30)
 	let isDrag = false
@@ -68,6 +68,7 @@
     table {
         border-collapse: collapse;
         width: 100%;
+        margin-top: 15px;
     }
 	td {
 		width: 80px;
@@ -141,9 +142,10 @@
 
 <svelte:window on:mousedown={beginDrag} on:mouseup={endDrag} />
 
-<table>
+<table class="caption-top">
+    <caption style="display: table-caption; text-align: center;">{title}</caption>
     <tr>
-        <th>Time</th>
+        <th></th>
         <th>Sun</th>
         <th>Mon</th>
         <th>Tues</th>
