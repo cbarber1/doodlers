@@ -10,6 +10,7 @@
     let selectedBlocksRight = new Array(columns.length * rows.length).fill(false);
     
     if (!isWriteable) {
+        // hardcoded time presets for the right calendar
         [2 * columns.length + 10, 2 * columns.length + 11, 3 * columns.length + 12, 2 * columns.length + 12, 6 * rows.length + 10, 7 * rows.length + 11, 8 * rows.length + 12, 9 * rows.length + 13].forEach(index => {
             selectedBlocksRight[index] = true;
         });
@@ -28,11 +29,6 @@
 
     const minHours = 4;
     let progressBarWidth = 0;
-
-    // initialize the pre-selections on right
-    // selectedBlocksRight.forEach(index => {
-    //     $selections[index] = true;
-    // });
 
 	const beginDrag = () => {
 		isDrag = true
