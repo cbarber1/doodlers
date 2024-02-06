@@ -58,6 +58,7 @@
 	}
     
     const updateSelectedBlocksCount = () => {
+        selectedBlocksCount = $state.filter((block) => block).length;
     };
 
     const isOverlappingBlock = (r, c) => {
