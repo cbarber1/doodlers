@@ -206,7 +206,7 @@
   .progress-bar-fill {
     height: 100%;
     background-color: #4caf50;
-    width: 0%; /* Initial width */
+    width: 0%; 
     text-align: right;
     line-height: 20px;
     color: white;
