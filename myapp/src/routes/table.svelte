@@ -1,6 +1,5 @@
 <script>
-  import { state } from "../store.js";
-  import { writable, derived } from "svelte/store";
+  import { state, stars } from "../store.js";
   import { fakeUserData } from "../lib/fakeUserData.js";
 
   export let title;
@@ -13,9 +12,6 @@
   const minHours = 4;
   let selectedBlocksCount = 0;
   let selectedHours = 0;
-
-  // Simulating state as a writable store for demonstration
-  // let state = writable(new Array(columns.length * rows.length).fill(false));
 
   //   let combinedData = derived([state, fakeUserData], ([$state, $fakeUserData]) => {
 
@@ -49,6 +45,13 @@
   const beginDrag = () => (isDrag = true);
   const endDrag = () => (isDrag = false);
 
+  const star = (r, c) => (event) => {
+    console.log("hello");
+    let index = r * columns.length + c;
+    $stars[index] = !$stars[index];
+    $state[index] = !$state[index];
+  }
+
   const toggleBlock = (index) => {
     $state[index] = !$state[index];
     updateSelectedBlocksCount();
@@ -71,23 +74,21 @@
   };
 
   // Determine if a block has all users' availability in "Preferences"
-  const getPreferences = (rowIndex, columnIndex) => {
-    const index = rowIndex * columns.length + columnIndex;
-    return fakeUserData.every((userData) => userData[index]);
+  const getPreferences = (r, c) => {
+    const index = r * columns.length + c;
+    return fakeUserData.every(((userData) => userData[index])) && ($state[index]) == true;
   };
 
   // Determine the proportion of availability in "Group Availability"
-  const getAvailabilityProportion = (rowIndex, columnIndex) => {
-    const index = rowIndex * columns.length + columnIndex;
-    let totalUsers = fakeUserData.length + 1; // add the user
+  const getAvailabilityProportion = (r, c) => {
+    const index = r * columns.length + c;
+    // add one for the current user
+    let current_user = $state.includes(true) ? 1 : 0;
+    let totalUsers = fakeUserData.length + current_user;
     let availableUsers = fakeUserData.reduce(
-      (count, userData) => count + (userData[index] ? 1 : 0),
+      (count, userData) => count + ((userData[index] || $state[index]) ? 1 : 0),
       0
     );
-    if ($state[index]) {
-      availableUsers += 1;
-      console.log("does this run?")
-    }
     return availableUsers / totalUsers;
   };
 
@@ -117,6 +118,8 @@
   </div>
 {/if}
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
 <div class="table-container">
   <table class="caption-top">
     <caption>{title}</caption>
@@ -140,20 +143,26 @@
               <th class="noselect times">{times[rowIndex]}</th>
             {:else}
               <td
-                class:available={
-                  $state[rowIndex * columns.length + columnIndex]}
-                style="background-color: {title === 'Group Availability'
+                style="background-color: {
+                $state[rowIndex * columns.length + columnIndex] && isWriteable ? getBackgroundColor(.5) : 
+                (title === 'Group Availability'
                   ? getBackgroundColor(
                       getAvailabilityProportion(rowIndex, columnIndex)
                     )
                   : title === 'Preferences' &&
                       getPreferences(rowIndex, columnIndex)
                     ? '#ADB3E3'
-                    : ''};"
+                    : '')};"
                 on:mousedown={handleMouse(rowIndex, columnIndex)}
                 on:mouseenter={handleMouse(rowIndex, columnIndex)}
                 on:mouseup={endDrag}
-              >
+              > {#if isWriteable}
+              <!-- <div class="rating">
+                <input id="rating1" type="radio" name="rating" value="1">
+                <label for="rating1">1</label>
+              </div> -->
+              <span on:click={star(rowIndex, columnIndex)} class="fa fa-star {$stars[rowIndex * columns.length + columnIndex] ? "checked" : "not-checked"}"></span>
+                  {/if}
               </td>
             {/if}
           {/each}
@@ -237,5 +246,19 @@
 
   .times {
     font-size: 10px;
+  }
+
+  .checked {
+    color: orange;
+    /* display: flex; */
+  }
+
+  .not-checked {
+    color: #ffffff;
+    /* display: flex; */
+  }
+
+  .fa-star {
+    font-size: 12px;
   }
 </style>
