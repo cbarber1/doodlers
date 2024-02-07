@@ -1,3 +1,3 @@
 import { writable } from 'svelte/store';
 
-export const state = writable(new Array(30*8).fill(false));
+export const state = writable(new Array(28*8).fill(false));

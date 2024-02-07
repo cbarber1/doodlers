@@ -83,9 +83,9 @@
     let current_user = $state.includes(true) ? 1 : 0;
     let totalUsers = fakeUserData.length + current_user;
     let availableUsers = fakeUserData.reduce(
-      (count, userData) => count + ((userData[index] || $state[index]) ? 1 : 0),
+      (count, userData) => count + (userData[index] ? 1 : 0),
       0
-    );
+    ) + ($state[index] ? 1 : 0);
     return availableUsers / totalUsers;
   };
 
