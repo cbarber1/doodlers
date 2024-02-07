@@ -7,11 +7,11 @@
 </script>
 
 
-<h1 class="text-center">
+<h3 class="text-center p-3">
   <!-- Attribution: <a href="https://www.flaticon.com/free-icons/time-and-date" title="time and date icons">Time and date icons created by Iconic Panda - Flaticon</a> -->
   <img src={clock} alt="Clock Icon" style="width: 32px; height: 32px; margin-right: 5px; margin-bottom: 6px; padding: 0;">
   Prefer2Meet
-</h1>
+</h3>
 
 <div class="container">
   <div class="row">

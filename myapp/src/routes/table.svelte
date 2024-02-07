@@ -38,11 +38,20 @@
   const beginDrag = () => (isDrag = true);
   const endDrag = () => (isDrag = false);
 
+  const star = (r, c) => (event) => {
+    let index = r * columns.length + c;
+    $state[index] = [!$state[index][0], !$state[index][1]];
+  }
+
   const toggleBlock = (index) => {
+  
     state.update((currentState) => {
       currentState[index] = [!currentState[index][0], currentState[index][1]];
       return currentState;
     });
+    if (!$state[index][0]) {
+      $state[index][1] = false;
+    }
     updateSelectedBlocksCount();
   };
 
@@ -124,12 +133,14 @@
 
 {#if isWriteable}
   <div>
-    <p>Try to select at least 4 hours! Selected: {selectedHours} hours</p>
+    <p class="progress-text">Try to select at least 4 hours! Selected: {selectedHours} hours</p>
     <div class="progress-bar">
       <div class="progress-bar-fill" style="width: {progressBarWidth}%"></div>
     </div>
   </div>
 {/if}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 <div class="table-container">
   <table class="caption-top">
@@ -174,7 +185,13 @@
                 on:mousedown={handleMouse(rowIndex, columnIndex)}
                 on:mouseenter={handleMouse(rowIndex, columnIndex)}
                 on:mouseup={endDrag}
-              >
+              > {#if isWriteable}
+              <!-- <div class="rating">
+                <input id="rating1" type="radio" name="rating" value="1">
+                <label for="rating1">1</label>
+              </div> -->
+              <span on:click={star(rowIndex, columnIndex)} class="fa fa-star {$state[rowIndex * columns.length + columnIndex][1] ? "checked" : "not-checked"}"></span>
+                  {/if}
               </td>
             {/if}
           {/each}
@@ -225,8 +242,12 @@
     background-color: #ade3c2;
   }
 
+  .progress-text {
+    margin-top: -50px;
+  }
+
   .progress-bar {
-    height: 20px;
+    height: 12px;
     width: 100%;
     background-color: #eee;
     border-radius: 4px;
@@ -253,5 +274,20 @@
 
   .times {
     font-size: 10px;
+  }
+
+  .checked {
+    color: orange;
+    /* display: flex; */
+  }
+
+  .not-checked {
+    color: #ffffff;
+    /* display: flex; */
+  }
+
+  .fa-star {
+    font-size: 12px;
+    cursor:pointer;
   }
 </style>
