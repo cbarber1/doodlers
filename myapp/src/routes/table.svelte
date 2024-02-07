@@ -1,5 +1,5 @@
 <script>
-  import { writable, derived } from 'svelte/store';
+  import { writable, derived } from "svelte/store";
   import { fakeUserData } from "../lib/fakeUserData.js";
 
   export let title;
@@ -16,15 +16,14 @@
   // Simulating state as a writable store for demonstration
   let state = writable(new Array(columns.length * rows.length).fill(false));
 
-//   let combinedData = derived([state, fakeUserData], ([$state, $fakeUserData]) => {
-   
-//     let updatedFakeData = [...$fakeUserData]; 
+  //   let combinedData = derived([state, fakeUserData], ([$state, $fakeUserData]) => {
 
-//     updatedFakeData.push($state);
+  //     let updatedFakeData = [...$fakeUserData];
 
-//     return updatedFakeData;
-//   });
+  //     updatedFakeData.push($state);
 
+  //     return updatedFakeData;
+  //   });
 
   let times = [];
   let time_start = 10;
@@ -73,27 +72,38 @@
     });
   };
 
-  // Determine if a block is selected in "Group Availability" or "Preferences"
-  const isSelectedInGroupOrPreferences = (r, c) => {
+  // Determine if a block has all users' availability in "Preferences"
+  const getPreferences = (r, c) => {
     const index = r * columns.length + c;
-    
-    if (title === "Group Availability") {
-        // Sum up the availability for this block across all users
-        let availableUsers = fakeUserData.reduce(
-        (count, userData) => count + (userData[index] ? 1 : 0),
-        0
-        );
-        // If at least one user is available, the block is considered selected
-        return availableUsers > 0;
-    } else if (title === "Preferences") {
-        // Check if all users are available at this block
-        return fakeUserData.every((userData) => userData[index]);
-    }
-    
-    // Default to false if neither condition is met
-    return false;
-    };
+    return fakeUserData.every((userData) => userData[index]);
+  };
 
+  // Determine the proportion of availability in "Group Availability"
+  const getAvailabilityProportion = (r, c) => {
+    const index = r * columns.length + c;
+    let totalUsers = fakeUserData.length;
+    let availableUsers = fakeUserData.reduce(
+      (count, userData) => count + (userData[index] ? 1 : 0),
+      0
+    );
+    return availableUsers / totalUsers;
+  };
+
+  // Function to calculate background color based on availability proportion
+  function getBackgroundColor(proportion) {
+    if (proportion === 0) {
+      return "";
+    }
+
+    const lightGreen = [216, 255, 231]; // #D8FFE7
+    const darkGreen = [44, 144, 82]; // #2C9052
+
+    const interpolatedColor = lightGreen.map((value, index) => {
+      return Math.round(value + (darkGreen[index] - value) * proportion);
+    });
+
+    return `rgb(${interpolatedColor.join(",")})`;
+  }
 </script>
 
 {#if isWriteable}
@@ -130,10 +140,14 @@
               <td
                 class:available={isWriteable &&
                   $state[rowIndex * columns.length + columnIndex]}
-                class:group-available={title === "Group Availability" &&
-                  isSelectedInGroupOrPreferences(rowIndex, columnIndex)}
-                class:preferences={title === "Preferences" &&
-                  isSelectedInGroupOrPreferences(rowIndex, columnIndex)}
+                style="background-color: {title === 'Group Availability'
+                  ? getBackgroundColor(
+                      getAvailabilityProportion(rowIndex, columnIndex)
+                    )
+                  : title === 'Preferences' &&
+                      getPreferences(rowIndex, columnIndex)
+                    ? '#ADB3E3'
+                    : ''};"
                 on:mousedown={handleMouse(rowIndex, columnIndex)}
                 on:mouseenter={handleMouse(rowIndex, columnIndex)}
                 on:mouseup={endDrag}
@@ -185,31 +199,25 @@
   }
 
   .available {
-    background-color: #90ee90; /* Light green */
+    background-color: #ADE3C2;
   }
-
-  .group-available {
-    background-color: #90ee90; /* Green-yellow, for group availability */
-  }
-
-   .preferences {
-    background-color: #228b22; /* Forest green, for overlapping blocks */
-  } 
 
   .progress-bar {
     height: 20px;
     width: 100%;
     background-color: #eee;
     margin-top: 10px;
+    border-radius: 4px;
   }
 
   .progress-bar-fill {
     height: 100%;
-    background-color: #4caf50;
-    width: 0%; 
+    background-color: #2C9052;
+    width: 0%;
     text-align: right;
     line-height: 20px;
     color: white;
+    border-radius: 4px;
   }
 
   .noselect {
