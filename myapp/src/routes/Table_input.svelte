@@ -41,6 +41,12 @@
 	const beginDrag = () => {
 		isDrag = true
 	}
+
+    const continueDrag = () => {
+        if (isDrag) {
+            isDrag = true
+        }
+    }
 	
 	const endDrag = () => {
 		isDrag = false
@@ -154,7 +160,7 @@
 </div>
 {/if}
 
-<svelte:window on:mousedown={beginDrag} on:mouseup={endDrag} />
+<svelte:window on:mousedown={beginDrag} on:mousemove={continueDrag} on:mouseup={endDrag} />
 
 <table class="caption-top">
     <caption style="display: table-caption; text-align: center;">{title}</caption>
