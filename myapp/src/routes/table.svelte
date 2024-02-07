@@ -8,6 +8,7 @@
   let rows = new Array(28);
   let isDrag = false;
   let isWriteable = title === "My Availability";
+
   let progressBarWidth = 0;
   const minHours = 4;
   let selectedBlocksCount = 0;
@@ -17,6 +18,7 @@
   let time_start = 10;
   let period = "AM";
 
+  // Calculate times
   for (let i = 0; i < rows.length; i++) {
     times.push(`${time_start}${period}`);
     times.push("");
@@ -67,29 +69,34 @@
     let availableUsers = fakeUserData.reduce(
       (count, userData) => count + (userData[index][0] ? 1 : 0),
       $state[index][0] ? 1 : 0
-      );
-      return availableUsers / totalUsers;
-    };
+    );
+    return availableUsers / totalUsers;
+  };
 
-    // Check if the user has selected any availability
-    const userHasAvailability = () => {
-      return $state.some((value) => value[0]);
-    };
+  // Check if the user has selected any availability
+  const userHasAvailability = () => {
+    return $state.some((value) => value[0]);
+  };
 
   // Determine the proportion of preferences in "Preferences"
   const getPreferenceProportion = (r, c) => {
     const index = r * columns.length + c;
-  
-    if (!fakeUserData.every((userData) => userData[index][0]) || (userHasAvailability() && !$state[index][0])) return 0;
 
-    let totalUsers = fakeUserData.length + (userHasAvailability() ? 1 : 0) + 1; 
+    if (
+      !fakeUserData.every((userData) => userData[index][0]) ||
+      (userHasAvailability() && !$state[index][0])
+    )
+      return 0;
+
+    let totalUsers = fakeUserData.length + (userHasAvailability() ? 1 : 0) + 1;
     let preferringUsers = fakeUserData.reduce(
       (count, userData) => count + (userData[index][1] ? 1 : 0),
-      0 
+      0
     );
 
     // Include current user's preference if they are available and have marked a preference
-    if (userHasAvailability() && $state[index][0]) preferringUsers += $state[index][1] ? 1 : 0;
+    if (userHasAvailability() && $state[index][0])
+      preferringUsers += $state[index][1] ? 1 : 0;
 
     // Ensure a minimum proportion for shading even if no preferences are set
     let minimumProportion = userHasAvailability() ? 1 / totalUsers : 0;
@@ -101,7 +108,7 @@
 
   const lightPurple = [229, 232, 255]; // #E5E8FF
   const darkPurple = [136, 91, 255]; // #885BFF
-  
+
   function getBackgroundColor(proportion, light, dark) {
     if (proportion === 0) {
       return "";
@@ -222,7 +229,6 @@
     height: 20px;
     width: 100%;
     background-color: #eee;
-    margin-top: 10px;
     border-radius: 4px;
   }
 
