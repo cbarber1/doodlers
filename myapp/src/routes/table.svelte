@@ -13,16 +13,6 @@
   let selectedBlocksCount = 0;
   let selectedHours = 0;
 
-  // Simulating state as a writable store for demonstration
-  //   let combinedData = derived([state, fakeUserData], ([$state, $fakeUserData]) => {
-
-  //     let updatedFakeData = [...$fakeUserData];
-
-  //     updatedFakeData.push($state);
-
-  //     return updatedFakeData;
-  //   });
-
   let times = [];
   let time_start = 10;
   let period = "AM";
@@ -65,26 +55,34 @@
   const updateSelectedBlocksCount = () => {
     state.subscribe(($state) => {
       selectedBlocksCount = $state.filter((block) => block).length;
-      selectedHours = selectedBlocksCount * 0.5; // Assuming each block represents 30 minutes
+      selectedHours = selectedBlocksCount * 0.5; // 30 minutes
       progressBarWidth = (selectedHours / minHours) * 100;
     });
+  };
+
+  // Check if the user has selected any availability
+  const userHasAvailability = () => {
+    return $state.some(value => value);
   };
 
   // Determine if a block has all users' availability in "Preferences"
   const getPreferences = (r, c) => {
     const index = r * columns.length + c;
-    return fakeUserData.every(((userData) => userData[index])) && ($state[index]) == true;
+    // If the user has no availability, only use fakeUserData
+    if (!userHasAvailability()) {
+      return fakeUserData.every(userData => userData[index]);
+    }
+    // If the user has availability, check against both user's and fake data's availability
+    return fakeUserData.every(userData => userData[index]) && $state[index];
   };
 
   // Determine the proportion of availability in "Group Availability"
   const getAvailabilityProportion = (r, c) => {
     const index = r * columns.length + c;
-    // add one for the current user
-    let current_user = $state.includes(true) ? 1 : 0;
-    let totalUsers = fakeUserData.length + current_user;
+    let totalUsers = fakeUserData.length + 1; // Including the current user
     let availableUsers = fakeUserData.reduce(
-      (count, userData) => count + ((userData[index] || $state[index]) ? 1 : 0),
-      0
+      (count, userData) => count + (userData[index] ? 1 : 0),
+      $state[index] ? 1 : 0 // Starting the count with the current user's availability
     );
     return availableUsers / totalUsers;
   };
