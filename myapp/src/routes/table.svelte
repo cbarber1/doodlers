@@ -38,7 +38,7 @@
 
   const toggleBlock = (index) => {
     state.update((currentState) => {
-      currentState[index] = !currentState[index];
+      currentState[index] = [!currentState[index][0], currentState[index][1]];
       return currentState;
     });
     updateSelectedBlocksCount();
@@ -54,7 +54,7 @@
   // Update the count of selected blocks and calculate selected hours
   const updateSelectedBlocksCount = () => {
     state.subscribe(($state) => {
-      selectedBlocksCount = $state.filter((block) => block).length;
+      selectedBlocksCount = $state.filter((block) => block[0]).length;
       selectedHours = selectedBlocksCount * 0.5; // 30 minutes
       progressBarWidth = (selectedHours / minHours) * 100;
     });
@@ -62,7 +62,7 @@
 
   // Check if the user has selected any availability
   const userHasAvailability = () => {
-    return $state.some(value => value);
+    return $state.some(value => value[0]);
   };
 
   // Determine if a block has all users' availability in "Preferences"
@@ -70,19 +70,19 @@
     const index = r * columns.length + c;
     // If the user has no availability, only use fakeUserData
     if (!userHasAvailability()) {
-      return fakeUserData.every(userData => userData[index]);
+      return fakeUserData.every(userData => userData[index][0]);
     }
     // If the user has availability, check against both user's and fake data's availability
-    return fakeUserData.every(userData => userData[index]) && $state[index];
+    return fakeUserData.every(userData => userData[index][0]) && $state[index][0];
   };
 
   // Determine the proportion of availability in "Group Availability"
   const getAvailabilityProportion = (r, c) => {
     const index = r * columns.length + c;
-    let totalUsers = fakeUserData.length + 1; // Including the current user
+    let totalUsers = fakeUserData.length + 1;
     let availableUsers = fakeUserData.reduce(
-      (count, userData) => count + (userData[index] ? 1 : 0),
-      $state[index] ? 1 : 0 // Starting the count with the current user's availability
+      (count, userData) => count + (userData[index][0] ? 1 : 0),
+      $state[index][0] ? 1 : 0 // Starting the count with the current user's availability
     );
     return availableUsers / totalUsers;
   };
@@ -137,7 +137,7 @@
             {:else}
               <td
                 style="background-color: {
-                $state[rowIndex * columns.length + columnIndex] && isWriteable ? getBackgroundColor(.5) : 
+                $state[rowIndex * columns.length + columnIndex][0] && isWriteable ? getBackgroundColor(.5) : 
                 (title === 'Group Availability'
                   ? getBackgroundColor(
                       getAvailabilityProportion(rowIndex, columnIndex)
