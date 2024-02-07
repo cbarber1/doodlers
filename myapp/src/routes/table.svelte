@@ -1,5 +1,5 @@
 <script>
-  import { writable, derived } from "svelte/store";
+  import { state } from "../store.js";
   import { fakeUserData } from "../lib/fakeUserData.js";
 
   export let title;
@@ -14,8 +14,6 @@
   let selectedHours = 0;
 
   // Simulating state as a writable store for demonstration
-  let state = writable(new Array(columns.length * rows.length).fill(false));
-
   //   let combinedData = derived([state, fakeUserData], ([$state, $fakeUserData]) => {
 
   //     let updatedFakeData = [...$fakeUserData];
@@ -75,15 +73,17 @@
   // Determine if a block has all users' availability in "Preferences"
   const getPreferences = (r, c) => {
     const index = r * columns.length + c;
-    return fakeUserData.every((userData) => userData[index]);
+    return fakeUserData.every(((userData) => userData[index])) && ($state[index]) == true;
   };
 
   // Determine the proportion of availability in "Group Availability"
   const getAvailabilityProportion = (r, c) => {
     const index = r * columns.length + c;
-    let totalUsers = fakeUserData.length;
+    // add one for the current user
+    let current_user = $state.includes(true) ? 1 : 0;
+    let totalUsers = fakeUserData.length + current_user;
     let availableUsers = fakeUserData.reduce(
-      (count, userData) => count + (userData[index] ? 1 : 0),
+      (count, userData) => count + ((userData[index] || $state[index]) ? 1 : 0),
       0
     );
     return availableUsers / totalUsers;
@@ -138,16 +138,16 @@
               <th class="noselect times">{times[rowIndex]}</th>
             {:else}
               <td
-                class:available={isWriteable &&
-                  $state[rowIndex * columns.length + columnIndex]}
-                style="background-color: {title === 'Group Availability'
+                style="background-color: {
+                $state[rowIndex * columns.length + columnIndex] && isWriteable ? getBackgroundColor(.5) : 
+                (title === 'Group Availability'
                   ? getBackgroundColor(
                       getAvailabilityProportion(rowIndex, columnIndex)
                     )
                   : title === 'Preferences' &&
                       getPreferences(rowIndex, columnIndex)
                     ? '#ADB3E3'
-                    : ''};"
+                    : '')};"
                 on:mousedown={handleMouse(rowIndex, columnIndex)}
                 on:mouseenter={handleMouse(rowIndex, columnIndex)}
                 on:mouseup={endDrag}
