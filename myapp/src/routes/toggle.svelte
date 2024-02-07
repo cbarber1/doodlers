@@ -21,7 +21,7 @@
 
 <style>
   .segmented-button-wrapper {
-    margin-right: 50px;
+    margin-top: 5px;
   }
 
   :global(.mdc-segmented-button__segment--selected) {
@@ -30,6 +30,11 @@
   }
 
   :global(.mdc-segmented-button__segment:hover) {
-    background-color: #ade3c2;
+    background-color: #E2F9EB;
+  }
+
+  :global(.mdc-ripple-upgraded) {
+    --mdc-ripple-color: transparent !important;
+    --mdc-ripple-press-opacity: 0 !important;
   }
 </style>
