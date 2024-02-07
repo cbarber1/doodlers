@@ -1,9 +1,14 @@
 <script lang="ts">
+  import { createEventDispatcher } from "svelte";
   import SegmentedButton, { Segment } from "@smui/segmented-button";
   import { Label } from "@smui/common";
 
+  const dispatch = createEventDispatcher();
+
   let choices = ["Availability", "Preferences"];
   let selected = "Availability";
+
+  $: if (selected) dispatch("change", selected);
 </script>
 
 <div class="segmented-button-wrapper">
@@ -19,4 +24,12 @@
     margin-right: 50px;
   }
 
+  :global(.mdc-segmented-button__segment--selected) {
+    background-color: #ade3c2;
+    color: #2c9052; 
+  }
+
+  :global(.mdc-segmented-button__segment:hover) {
+    background-color: #ade3c2;
+  }
 </style>
