@@ -175,7 +175,7 @@
                         lightGreen,
                         darkGreen
                       )
-                    : title === 'Preferences'
+                    : title === 'Group Preferences'
                       ? getBackgroundColor(
                           getPreferenceProportion(rowIndex, columnIndex),
                           lightPurple,
@@ -243,7 +243,7 @@
   }
 
   .progress-text {
-    margin-top: -50px;
+    margin-top: 10px;
   }
 
   .progress-bar {
@@ -284,6 +284,12 @@
   .not-checked {
     color: #ffffff;
     /* display: flex; */
+  }
+
+  span {
+    height: 10px;
+    display: flex;
+    justify-content: right;
   }
 
   .fa-star {

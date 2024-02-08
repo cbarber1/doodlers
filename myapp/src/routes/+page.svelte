@@ -18,14 +18,14 @@
     <div class="col">
       <Table title={"My Availability"} />
     </div>
-    <div class="col">
+    <div class="col group">
       <div class="col text-center">
         <Toggle on:change={e => selectedToggle = e.detail} />
       </div>
       {#if selectedToggle === 'Availability'}
         <Table title={"Group Availability"} />
       {:else if selectedToggle === 'Preferences'}
-        <Table title={"Preferences"} />
+        <Table title={"Group Preferences"} />
       {/if}
     </div>
   </div>
