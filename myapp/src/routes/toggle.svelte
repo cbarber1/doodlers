@@ -29,13 +29,25 @@
     color: #2c9052;
   }
 
-  :global(.mdc-segmented-button__segment:nth-child(2).mdc-segmented-button__segment--selected) {
-    background-color: #ad93ff;
-    color: white;
+  :global(
+      .mdc-segmented-button__segment:nth-child(
+          2
+        ).mdc-segmented-button__segment--selected
+    ) {
+    background-color: #c3b0ff;
+    color: #6B3CFF;
   }
 
   :global(.mdc-segmented-button__segment:hover) {
-    background-color: #E2F9EB;
+    background-color: #e2f9eb;
+  }
+
+  :global(
+      .mdc-segmented-button__segment:nth-child(
+          2
+        ).mdc-segmented-button__segment:hover
+    ) {
+    background-color: #e8e1ff;
   }
 
   :global(.mdc-ripple-upgraded) {
