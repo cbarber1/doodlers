@@ -26,7 +26,12 @@
 
   :global(.mdc-segmented-button__segment--selected) {
     background-color: #ade3c2;
-    color: #2c9052; 
+    color: #2c9052;
+  }
+
+  :global(.mdc-segmented-button__segment:nth-child(2).mdc-segmented-button__segment--selected) {
+    background-color: purple;
+    color: white;
   }
 
   :global(.mdc-segmented-button__segment:hover) {
