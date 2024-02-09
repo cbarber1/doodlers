@@ -30,7 +30,7 @@
   }
 
   :global(.mdc-segmented-button__segment:nth-child(2).mdc-segmented-button__segment--selected) {
-    background-color: purple;
+    background-color: #ad93ff;
     color: white;
   }
 
