@@ -238,10 +238,6 @@
     height: 20px;
   }
 
-  .available {
-    background-color: #ade3c2;
-  }
-
   .progress-text {
     margin-top: 10px;
   }

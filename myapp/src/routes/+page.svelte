@@ -30,9 +30,3 @@
     </div>
   </div>
 </div>
-
-<style>
-  h1 {
-    margin-top: 50px;
-  }
-</style>
