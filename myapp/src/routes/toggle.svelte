@@ -34,7 +34,7 @@
           2
         ).mdc-segmented-button__segment--selected
     ) {
-    background-color: #c3b0ff;
+    background-color: #CDBDFF;
     color: #6B3CFF;
   }
 
